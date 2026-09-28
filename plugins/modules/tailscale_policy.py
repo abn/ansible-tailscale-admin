@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_policy
 short_description: Manage a tailnet access control policy
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Brings the access control policy of a Tailscale tailnet to the document the
     task gives it, writing only when the two differ.
@@ -48,7 +48,7 @@ options:
       - Exactly one of this and O(content) gives the document. This one is for a
         policy kept under version control, where the run reads and diffs a file.
     type: path
-    version_added: 0.1.0
+    version_added: 1.0.0
   content:
     description:
       - The policy document itself, as HuJSON text, for a document a template or a
@@ -58,7 +58,7 @@ options:
         contents. The two differ only in where the text comes from.
       - Mutually exclusive with O(policy); exactly one of the two is required.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   groups:
     description:
       - Groups to declare, as a mapping of group name to the list of its members.
@@ -74,7 +74,7 @@ options:
         a group the file is right not to declare. The server refuses such a
         document with C(group not found) when the group is not synced.
     type: dict
-    version_added: 0.1.0
+    version_added: 1.0.0
   app_connectors:
     description:
       - App connectors to declare, each routing the traffic for one application
@@ -97,7 +97,7 @@ options:
         naming one must set neither C(domains) nor an empty list of them.
     type: list
     elements: dict
-    version_added: 0.1.0
+    version_added: 1.0.0
     suboptions:
       name:
         description:
@@ -105,7 +105,7 @@ options:
             name it. Two connectors in one document cannot share one.
         type: str
         required: true
-        version_added: 0.1.0
+        version_added: 1.0.0
       connectors:
         description:
           - The tags of the devices that route the application's traffic. Each is
@@ -114,7 +114,7 @@ options:
         type: list
         elements: str
         required: true
-        version_added: 0.1.0
+        version_added: 1.0.0
       domains:
         description:
           - The domains this connector routes, required unless C(preset) or
@@ -122,7 +122,7 @@ options:
             C(*.example.com), and refused for a top-level domain.
         type: list
         elements: str
-        version_added: 0.1.0
+        version_added: 1.0.0
       preset:
         description:
           - An application Tailscale fetches the domains and routes for, named as
@@ -133,7 +133,7 @@ options:
             module does not hold the list of regions Tailscale recognises. Give
             those as C(preset_id) instead.
         type: str
-        version_added: 0.1.0
+        version_added: 1.0.0
         choices:
           - "AWS CloudFront (global)"
           - "Confluence"
@@ -160,14 +160,14 @@ options:
             written as given and the server is the authority on it, refusing an
             identifier it does not recognise. Mutually exclusive with C(preset).
         type: str
-        version_added: 0.1.0
+        version_added: 1.0.0
       routes:
         description:
           - Routes the connector advertises, as CIDR ranges. A custom app has to
             have its routes approved through C(autoApprovers).
         type: list
         elements: str
-        version_added: 0.1.0
+        version_added: 1.0.0
   tests:
     description:
       - Access tests to declare, each asserting what a source may or may not
@@ -180,7 +180,7 @@ options:
       - A declared test is appended to the C(tests) section of the file.
     type: list
     elements: dict
-    version_added: 0.1.0
+    version_added: 1.0.0
     suboptions:
       src:
         description:
@@ -188,33 +188,33 @@ options:
             C(group:) or C(tag:) selector, a host alias, or a Tailscale IP.
         type: str
         required: true
-        version_added: 0.1.0
+        version_added: 1.0.0
       accept:
         description:
           - Destinations the source must be able to reach, as C(host:port). The
             server refuses a test naming C(*) as a source or a destination.
         type: list
         elements: str
-        version_added: 0.1.0
+        version_added: 1.0.0
       deny:
         description:
           - Destinations the source must not be able to reach, as C(host:port).
         type: list
         elements: str
-        version_added: 0.1.0
+        version_added: 1.0.0
       proto:
         description:
           - The IP protocol the assertions apply to, so the test checks one
             protocol rather than either.
         type: str
-        version_added: 0.1.0
+        version_added: 1.0.0
       src_posture_attrs:
         description:
           - The device posture attributes to evaluate the assertions under, as a
             mapping of attribute to a string, a number or a boolean. Only needed
             when the access rules carry posture conditions.
         type: dict
-        version_added: 0.1.0
+        version_added: 1.0.0
   allow_all_traffic:
     description:
       - Confirm that a policy with no access rules is intended.
@@ -226,7 +226,7 @@ options:
         direction, and needs no confirmation.
     type: bool
     default: false
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

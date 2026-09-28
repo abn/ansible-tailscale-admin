@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_log_streaming
 short_description: Manage where a tailnet streams its logs
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles the log streaming destination for one log type, which is the system
     the tailnet posts that log to and how. A tailnet has one destination per log
@@ -53,7 +53,7 @@ options:
     choices:
       - configuration
       - network
-    version_added: 0.1.0
+    version_added: 1.0.0
   state:
     description:
       - Whether the tailnet should stream this log to a destination.
@@ -65,7 +65,7 @@ options:
       - present
       - absent
     default: present
-    version_added: 0.1.0
+    version_added: 1.0.0
   destination_type:
     description:
       - The kind of system the tailnet posts this log to.
@@ -80,19 +80,19 @@ options:
       - datadog
       - axiom
       - s3
-    version_added: 0.1.0
+    version_added: 1.0.0
   url:
     description:
       - Where the tailnet posts the log stream.
       - May be left out for O(destination_type=s3), which is the one destination
         where an empty URL means the official Amazon endpoint rather than nowhere.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   user:
     description:
       - The username the tailnet authenticates to the destination with.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   token:
     description:
       - The token or password the tailnet authenticates to the destination with.
@@ -101,14 +101,14 @@ options:
         holds is the one in use, so a task giving it writes on every run.
       - Marked C(no_log), so Ansible redacts it in task output.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   upload_period_minutes:
     description:
       - How many minutes to wait between uploads of new logs.
       - Leave it out to keep the destination's own setting. The API caps it at
         1440, which is a day.
     type: int
-    version_added: 0.1.0
+    version_added: 1.0.0
   compression_format:
     description:
       - How the tailnet compresses the log stream.
@@ -119,24 +119,24 @@ options:
       - zstd
       - gzip
       - none
-    version_added: 0.1.0
+    version_added: 1.0.0
   s3_bucket:
     description:
       - The S3 bucket the tailnet writes the log stream to. Required when
         O(destination_type=s3).
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   s3_region:
     description:
       - The region the O(s3_bucket) is in. Required when O(destination_type=s3).
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   s3_key_prefix:
     description:
       - A key prefix to put in front of the name the tailnet generates for each
         object.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   s3_authentication_type:
     description:
       - How the tailnet authenticates to S3. Required when
@@ -146,7 +146,7 @@ options:
     choices:
       - accesskey
       - rolearn
-    version_added: 0.1.0
+    version_added: 1.0.0
   s3_access_key_id:
     description:
       - The S3 access key ID, required when O(s3_authentication_type=accesskey).
@@ -154,7 +154,7 @@ options:
         treats the ID as an identifier rather than a secret. The secret beside it
         is what must not leak.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   s3_secret_access_key:
     description:
       - The S3 secret access key, required when
@@ -162,13 +162,13 @@ options:
       - The API never returns it, so a task giving it writes on every run, as
         O(token) does. Marked C(no_log), so Ansible redacts it in task output.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   s3_role_arn:
     description:
       - The IAM role the tailnet assumes in the account holding O(s3_bucket),
         required when O(s3_authentication_type=rolearn).
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

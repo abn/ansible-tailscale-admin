@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_contacts
 short_description: Manage the contact addresses of a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles the email address of each contact type a tailnet can hold. A
     tailnet has one account contact, one support contact and one security
@@ -39,17 +39,17 @@ options:
     description:
       - The email address the tailnet keeps as its account contact.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   support:
     description:
       - The email address the tailnet keeps as its support contact.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   security:
     description:
       - The email address the tailnet keeps as its security contact.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

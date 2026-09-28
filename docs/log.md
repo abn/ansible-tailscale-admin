@@ -15,6 +15,11 @@ release notes live in `CHANGELOG.md`, generated from `changelogs/fragments/`.
 
 ## 2026-09-28
 
+- Prepared the collection for its first release: `galaxy.yml` and every module's
+  `version_added` are now `1.0.0`, the `README` states the version rather than
+  that it is unpublished and installs from Galaxy first, and `overview` no longer
+  says the collection is unpublished. A `release_summary` fragment describes the
+  first release.
 - Added a live-verification section to the contributing guide, saying that a live
   run takes an explicitly set key (`.tskey`, or `TS_KEY_FILE`) and a development
   tailnet, and that nothing is read from the host's own `tailscale` CLI. The guide

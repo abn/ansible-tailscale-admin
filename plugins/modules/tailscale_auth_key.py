@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_auth_key
 short_description: Manage the credentials of a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Creates, updates and removes the credentials of a Tailscale tailnet, which
     are auth keys, OAuth clients and federated identities.
@@ -42,7 +42,7 @@ options:
       - present
       - absent
     default: present
-    version_added: 0.1.0
+    version_added: 1.0.0
   key_type:
     description:
       - Which kind of credential this task manages, which is the API's own
@@ -56,14 +56,14 @@ options:
       - client
       - federated
     default: auth
-    version_added: 0.1.0
+    version_added: 1.0.0
   key_id:
     description:
       - The id of an existing credential, as the API reports it.
       - The id is opaque, so O(description) is the practical way to name a
         credential in a playbook. Given an id, the lookup is by id alone.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   description:
     description:
       - The short purpose of the credential, which the admin console shows and
@@ -73,7 +73,7 @@ options:
       - Left as the credential already has it when not given and O(key_id) is
         given, which is the only way to update a credential without naming it.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   expiry_seconds:
     description:
       - How long an auth key stays valid, counted from the moment it is created.
@@ -81,7 +81,7 @@ options:
         different value on an existing key is a failure rather than a change.
       - Left to the API, which grants 90 days, when not given.
     type: int
-    version_added: 0.1.0
+    version_added: 1.0.0
   capabilities:
     description:
       - What an auth key may do, in the API's own shape.
@@ -89,37 +89,37 @@ options:
         flags whether or not they were sent, so an omitted one is compared as
         false, which is what the API grants for it.
     type: dict
-    version_added: 0.1.0
+    version_added: 1.0.0
     suboptions:
       devices:
         description: What the key may do with devices.
         type: dict
         required: true
-        version_added: 0.1.0
+        version_added: 1.0.0
         suboptions:
           create:
             description: What the key may do when registering a device.
             type: dict
             required: true
-            version_added: 0.1.0
+            version_added: 1.0.0
             suboptions:
               reusable:
                 description:
                   - Whether the key may register more than one device.
                 type: bool
-                version_added: 0.1.0
+                version_added: 1.0.0
               ephemeral:
                 description:
                   - Whether a device registered with the key removes itself when
                     it disconnects for good.
                 type: bool
-                version_added: 0.1.0
+                version_added: 1.0.0
               preauthorized:
                 description:
                   - Whether a device registered with the key joins without
                     waiting for an administrator to approve it.
                 type: bool
-                version_added: 0.1.0
+                version_added: 1.0.0
               tags:
                 description:
                   - The tags applied to a device registered with the key.
@@ -133,14 +133,14 @@ options:
                     not own.
                 type: list
                 elements: str
-                version_added: 0.1.0
+                version_added: 1.0.0
   scopes:
     description:
       - The OAuth scopes granted to a client or a federated identity.
       - The order carries no meaning and the comparison ignores it.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   tags:
     description:
       - The tags a client or a federated identity may put on the auth keys it
@@ -149,32 +149,32 @@ options:
         C(auth_keys), and refused without them.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   issuer:
     description:
       - The issuer of the OIDC identity token a federated identity is exchanged
         from, which must be a publicly reachable https URL.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   subject:
     description:
       - The pattern matched against the C(sub) claim of the identity token, where
         an asterisk matches any character.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   audience:
     description:
       - The value matched against the C(aud) claim of the identity token.
       - The API generates a secure one at creation, so this is only worth setting
         when the identity provider needs a particular format.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   custom_claim_rules:
     description:
       - A map from a claim name to the pattern matched against that claim of the
         identity token, where an asterisk matches any character.
     type: dict
-    version_added: 0.1.0
+    version_added: 1.0.0
 seealso:
   - module: abn.tailscale.tailscale_policy
   - name: OAuth clients, their scopes, and the tags they may carry

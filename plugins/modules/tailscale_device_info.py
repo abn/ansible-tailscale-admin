@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_device_info
 short_description: List the devices in a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Returns every device the tailnet holds. This is a read, not a resource. There
     is nothing to reconcile, nothing to create and nothing to delete, so the

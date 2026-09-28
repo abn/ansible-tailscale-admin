@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_service_info
 short_description: List the Services published in a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Returns every Service the tailnet holds, as the API's C(vipServices) list. This
     is a read, not a resource. There is nothing to reconcile, so the module always

@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_user
 short_description: Manage the role and access of a tailnet's users
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles the role, suspension and approval of a user that already belongs to
     a tailnet, and removes one with O(state=absent).
@@ -48,20 +48,20 @@ options:
       - present
       - absent
     default: present
-    version_added: 0.1.0
+    version_added: 1.0.0
   login_name:
     description:
       - The emailish login name of the user, matched without regard to case.
       - Mutually exclusive with O(user_id), and one of the two is required.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   user_id:
     description:
       - The identifier the API gives the user, which is what every per-user
         endpoint takes.
       - Mutually exclusive with O(login_name), and one of the two is required.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   role:
     description:
       - The role the user holds in the tailnet, which decides what the user may
@@ -78,14 +78,14 @@ options:
       - network-admin
       - billing-admin
       - auditor
-    version_added: 0.1.0
+    version_added: 1.0.0
   suspended:
     description:
       - Whether the user is suspended from the tailnet. A suspended user keeps its
         devices and its role, and cannot reach the tailnet until it is restored.
       - Left as the user already is when not given.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   approved:
     description:
       - Whether the user is cleared to join the tailnet. It matters only where the
@@ -97,7 +97,7 @@ options:
         that would not happen.
       - Left as the user already is when not given.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

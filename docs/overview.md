@@ -19,7 +19,7 @@ bring the tailnet to it, writing only what differs.
 There is no Ansible module for the Tailscale control plane. The collections named
 after Tailscale are node-side: they install `tailscaled` on a host and run
 `tailscale up`. None of them manage a tailnet, which is a different object with
-different failure modes. Version 0.1.0 is not published on Galaxy.
+different failure modes. This collection does.
 
 ## The modules
 

@@ -2,7 +2,7 @@
 # See https://docs.ansible.com/projects/ansible/latest/dev_guide/collections_galaxy_meta.html
 namespace: abn
 name: tailscale
-version: 0.1.0
+version: 1.0.0
 readme: README.md
 authors:
   - Arun Babu Neelicattu (github.com/abn)

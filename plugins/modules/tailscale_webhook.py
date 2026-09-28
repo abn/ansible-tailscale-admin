@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_webhook
 short_description: Manage the webhook endpoints of a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles the webhook endpoints Tailscale posts tailnet events to. An
     endpoint is addressed by the URL events are sent to, which is the natural key
@@ -48,7 +48,7 @@ options:
         the module before a request is made.
     type: str
     required: true
-    version_added: 0.1.0
+    version_added: 1.0.0
   state:
     description:
       - Whether the endpoint should exist.
@@ -60,7 +60,7 @@ options:
       - present
       - absent
     default: present
-    version_added: 0.1.0
+    version_added: 1.0.0
   provider_type:
     description:
       - The format outgoing events are sent in, for a destination that expects
@@ -70,7 +70,7 @@ options:
         change. Omitted leaves the provider of an existing endpoint alone, and a
         value that differs from the one an existing endpoint holds is refused.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   subscriptions:
     description:
       - The events that trigger a POST to O(endpoint_url). Required when
@@ -99,7 +99,7 @@ options:
       - userRoleUpdated
       - subnetIPForwardingNotEnabled
       - exitNodeIPForwardingNotEnabled
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

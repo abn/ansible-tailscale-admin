@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_aws_external_id
 short_description: Read a tailnet's AWS external id and validate a trust policy
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Returns the external id Tailscale supplies to AWS when it assumes an IAM role
     to stream logs to S3, and the AWS account id it presents from, and optionally
@@ -47,7 +47,7 @@ options:
         nothing in the tailnet.
       - Leave it out to read the id and the account id without validating anything.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
 attributes:
   check_mode:
     description: >-

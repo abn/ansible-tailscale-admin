@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_device
 short_description: Manage a device in a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles the properties of a device that already exists in a Tailscale
     tailnet, and removes one on request.
@@ -54,14 +54,14 @@ options:
       - present
       - absent
     default: present
-    version_added: 0.1.0
+    version_added: 1.0.0
   device_id:
     description:
       - The device to manage, by the ID the admin console shows.
       - The preferred form is the C(nodeId), a string beginning with C(n). The
         legacy numeric C(id) is accepted too, and either names the same device.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   device_name:
     description:
       - The device to manage, by the label part of its MagicDNS name, which is
@@ -75,14 +75,14 @@ options:
         for every device, which is the quickest way to see which of the two a task
         should use.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   address:
     description:
       - The device to manage, by a Tailscale IP it holds.
       - Either address family is accepted, and a device holding several matches on
         any one of them.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   tag:
     description:
       - The device to manage, by a tag it carries.
@@ -91,7 +91,7 @@ options:
         for a tailnet where exactly one device carries the tag, and for
         O(state=absent) over a whole group of them.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   name:
     description:
       - The label to give the device.
@@ -101,7 +101,7 @@ options:
         in the form Tailscale keeps and refuses any other, rather than reporting a
         change on every run.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   tags:
     description:
       - The tags the device should carry, which replaces whatever it carries now.
@@ -115,7 +115,7 @@ options:
         M(abn.tailscale.tailscale_policy)'s business and not this module's.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   authorized:
     description:
       - Whether the device is authorized to join the tailnet.
@@ -127,7 +127,7 @@ options:
       - A device that joined without being pre-authorized arrives unapproved, so a
         task asking for C(false) on one is quiet.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   key_expiry_disabled:
     description:
       - Whether the device's keys are exempt from expiry.
@@ -139,7 +139,7 @@ options:
         the key would have had, which may already have passed, and a device whose
         key has passed has to authenticate again.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   tailscale_ip:
     description:
       - The Tailscale IPv4 address the device should hold.
@@ -148,7 +148,7 @@ options:
         that is the control node of the connection Ansible is running over loses
         the connection it is running over.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   expire_key:
     description:
       - Whether to expire the device's node key, which makes it authenticate again.
@@ -156,7 +156,7 @@ options:
         over the same task reports no change rather than expiring the key again.
     type: bool
     default: false
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

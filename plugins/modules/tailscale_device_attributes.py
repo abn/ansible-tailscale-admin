@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_device_attributes
 short_description: Manage the custom posture attributes of a device
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles the user-managed posture attributes of one device, which are the
     attributes a client writes under the C(custom:) namespace.
@@ -38,7 +38,7 @@ options:
     type: list
     elements: dict
     required: true
-    version_added: 0.1.0
+    version_added: 1.0.0
     suboptions:
       key:
         description:
@@ -47,14 +47,14 @@ options:
             underscores and colons only.
         type: str
         required: true
-        version_added: 0.1.0
+        version_added: 1.0.0
       value:
         description:
           - The value the attribute should hold.
           - Required when O(attributes[].state=present), and ignored when it is
             C(absent).
         type: raw
-        version_added: 0.1.0
+        version_added: 1.0.0
       state:
         description:
           - Whether the attribute should be present with O(attributes[].value),
@@ -64,34 +64,34 @@ options:
           - present
           - absent
         default: present
-        version_added: 0.1.0
+        version_added: 1.0.0
   device_id:
     description:
       - The device to manage, by the ID the admin console shows.
       - The preferred form is the C(nodeId), a string beginning with C(n). The
         legacy numeric C(id) is accepted too, and either names the same device.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   device_name:
     description:
       - The device to manage, by the label part of its MagicDNS name, which is
         the name without the suffix the tailnet appends to it.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   address:
     description:
       - The device to manage, by a Tailscale IP it holds.
       - Either address family is accepted, and a device holding several matches on
         any one of them.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   tag:
     description:
       - The device to manage, by a tag it carries.
       - A tag is a poor way to name one device, because a tag is usually held by
         several. The module refuses rather than choosing.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

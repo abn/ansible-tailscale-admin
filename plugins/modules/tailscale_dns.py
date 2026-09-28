@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_dns
 short_description: Manage the DNS configuration of a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles the DNS resolvers, split DNS mappings, search paths and
     preferences of a Tailscale tailnet.
@@ -41,33 +41,33 @@ options:
         C(use_with_exit_node=false).
     type: list
     elements: raw
-    version_added: 0.1.0
+    version_added: 1.0.0
   split_dns:
     description:
       - A map from a domain suffix to the resolvers that serve it.
       - Each value is a list of resolvers in the same shape as O(nameservers),
         including the string form and the carry-forward of C(use_with_exit_node).
     type: dict
-    version_added: 0.1.0
+    version_added: 1.0.0
   search_paths:
     description:
       - Additional DNS search paths, which are searched after the tailnet's own.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   magic_dns:
     description:
       - Whether MagicDNS resolves names of devices in the tailnet.
       - Left as the tailnet already has it when not given.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   override_local_dns:
     description:
       - Whether O(nameservers) replaces the host's own resolvers, rather than
         acting as fallbacks behind them.
       - Left as the tailnet already has it when not given.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

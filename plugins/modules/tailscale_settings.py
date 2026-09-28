@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_settings
 short_description: Manage the feature settings of a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Sets individual tailnet settings, such as whether joining a device needs
     approval and how long an authorisation key lasts.
@@ -28,50 +28,50 @@ options:
   devices_approval_on:
     description: Whether a new device must be approved before it can join.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   devices_auto_updates_on:
     description: Whether devices update themselves automatically.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   devices_key_duration_days:
     description: How long an authorisation key stays valid, in days.
     type: int
-    version_added: 0.1.0
+    version_added: 1.0.0
   users_approval_on:
     description: Whether a new user must be approved before joining.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   users_role_allowed_to_join_external_tailnets:
     description:
       - The role a user needs before they may join a tailnet outside this one.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   network_flow_logging_on:
     description: Whether the tailnet records network flow logs.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   regional_routing_on:
     description: Whether regional routing is available to the tailnet.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   posture_identity_collection_on:
     description: Whether device posture identity collection is enabled.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   https_enabled:
     description: Whether HTTPS certificates are enabled for the tailnet.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   acls_externally_managed_on:
     description:
       - Whether the access control policy is managed outside Tailscale.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
   acls_external_link:
     description:
       - Where the externally managed policy lives.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

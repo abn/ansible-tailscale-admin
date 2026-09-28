@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_service
 short_description: Manage the Services published into a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reconciles a Tailscale Service, a named resource published into the tailnet
     with its own MagicDNS name, its own addresses and its own access control,
@@ -47,7 +47,7 @@ options:
         this name, and O(state=absent) removes the Service holding it.
     type: str
     required: true
-    version_added: 0.1.0
+    version_added: 1.0.0
   state:
     description:
       - Whether the Service should exist.
@@ -58,14 +58,14 @@ options:
       - present
       - absent
     default: present
-    version_added: 0.1.0
+    version_added: 1.0.0
   display_name:
     description:
       - A human-readable label for the Service, shown in the admin console and to
         clients with access to it. At most 64 characters, which the API enforces.
       - Left as the Service holds it when not given. An empty string clears it.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   comment:
     description:
       - A free-text note about the Service.
@@ -74,7 +74,7 @@ options:
         and no comment are the same state and a task clearing the comment
         converges.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   ports:
     description:
       - The C(protocol:port) pairs the Service exposes, such as C(tcp:443).
@@ -85,7 +85,7 @@ options:
         advice to use C(do-not-validate) to stop the API validating them.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   tags:
     description:
       - Tags attached to the Service. They are access control rather than
@@ -96,7 +96,7 @@ options:
       - Left as the Service holds it when not given. An empty list clears them.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   addrs:
     description:
       - The addresses the Service answers on, the IPv4 followed by the IPv6.
@@ -109,7 +109,7 @@ options:
         the server assigned cannot make a run report a change.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   device_id:
     description:
       - The device that hosts the Service, named by the id the API lists, which
@@ -123,7 +123,7 @@ options:
         read, because it is already the value the approval endpoint is addressed
         with.
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   device_name:
     description:
       - The device that hosts the Service, named by the label part of its
@@ -138,7 +138,7 @@ options:
         matches no device, or more than one, is refused rather than guessed at.
       - Mutually exclusive with O(device_id) and O(address).
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   address:
     description:
       - The device that hosts the Service, named by a Tailscale IP it holds.
@@ -146,7 +146,7 @@ options:
         on any one of them.
       - Mutually exclusive with O(device_id) and O(device_name).
     type: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   approved:
     description:
       - Whether the device a device option named is approved to host the Service.
@@ -155,7 +155,7 @@ options:
         stores a false here as a real false, so a task that revokes an approval
         converges.
     type: bool
-    version_added: 0.1.0
+    version_added: 1.0.0
 """
 
 EXAMPLES = r"""

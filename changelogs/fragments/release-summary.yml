@@ -1,0 +1,8 @@
+---
+release_summary: >-
+  The first release. It manages the access control policy, DNS, the tailnet
+  settings, Services and their host approvals, devices and their routes,
+  credentials, users, logs and log streaming, contacts, posture attributes,
+  webhooks and the AWS external id, with two lookups and two read-only fact
+  modules. Every module reads what the tailnet holds and writes only what
+  differs, so a second run of the same playbook reports changed: 0.

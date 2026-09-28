@@ -6,7 +6,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 name: device
 short_description: Look up one device in a tailnet
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Resolves one device in the tailnet and returns one of its properties, for a
     template that needs a value rather than a list.

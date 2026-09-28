@@ -7,7 +7,7 @@ settings, the Services, the devices and the users it wants. Each module reads wh
 the tailnet holds and writes only what differs, so a playbook that applies the same
 state twice reports `changed: 0` the second time.
 
-Version 0.1.0, not published on Galaxy. Sixteen modules cover the access control
+Version 1.0.0. Sixteen modules cover the access control
 policy, the DNS configuration, the tailnet settings, the Services and their host
 approvals, the devices and their routes, the credentials, the users, the logs and
 log streaming, the contacts, the posture attributes, the webhooks and the AWS
@@ -36,7 +36,11 @@ one case where a document that denies you access is still accepted by the server
 
 ## Install
 
-The collection is not on Galaxy, so install it from this repository:
+```sh
+ansible-galaxy collection install abn.tailscale
+```
+
+To track `main` instead of a release, install from the repository:
 
 ```sh
 ansible-galaxy collection install git+https://github.com/abn/ansible-tailscale-admin.git
@@ -45,7 +49,7 @@ ansible-galaxy collection install git+https://github.com/abn/ansible-tailscale-a
 A release tarball installs the same way, with a path in place of the URL:
 
 ```sh
-ansible-galaxy collection install ./abn-tailscale-0.1.0.tar.gz
+ansible-galaxy collection install ./abn-tailscale-1.0.0.tar.gz
 ```
 
 Either way the collection lands in `ansible_collections/abn/tailscale` under the

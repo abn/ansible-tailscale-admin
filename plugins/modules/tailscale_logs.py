@@ -7,7 +7,7 @@ from __future__ import annotations
 DOCUMENTATION = r"""
 module: tailscale_logs
 short_description: Read a window of a tailnet's logs
-version_added: 0.1.0
+version_added: 1.0.0
 description:
   - Reads the log entries a tailnet recorded over a time window and returns them
     as they stand. This is a read, not a resource. There is nothing to reconcile,
@@ -52,7 +52,7 @@ options:
     choices:
       - configuration
       - network
-    version_added: 0.1.0
+    version_added: 1.0.0
   start:
     description:
       - The beginning of the window, as a timestamp in RFC 3339, for example
@@ -67,7 +67,7 @@ options:
         that, the API would report a value the task never wrote.
     type: str
     required: true
-    version_added: 0.1.0
+    version_added: 1.0.0
   end:
     description:
       - The end of the window, in the same form as O(start).
@@ -78,7 +78,7 @@ options:
         the module reports no entries.
     type: str
     required: true
-    version_added: 0.1.0
+    version_added: 1.0.0
   actor:
     description:
       - Return only entries whose actor matches, as a list so that any one of
@@ -90,7 +90,7 @@ options:
         actor to filter on.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   target:
     description:
       - Return only entries whose target matches any part of any of the given
@@ -99,7 +99,7 @@ options:
         target to filter on.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
   event:
     description:
       - Return only entries for the given events, as a list, where a value is an
@@ -111,7 +111,7 @@ options:
         events to filter on.
     type: list
     elements: str
-    version_added: 0.1.0
+    version_added: 1.0.0
 attributes:
   check_mode:
     description: >-
