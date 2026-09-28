@@ -1,0 +1,5 @@
+---
+minor_changes:
+  - the ``check`` and ``release`` workflows turn off the setup-go module cache. The
+    repository has no ``go.mod``, because Go is only used to install ``okf``, so
+    setup-go's default cache restore warned on every run.

@@ -86,6 +86,8 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version: '1.24'
+          # No go.mod or go.sum: Go only installs okf, and caching it warns.
+          cache: false
 
       # setup-go pins GOTOOLCHAIN=local, so the release okf needs is fetched only
       # because this asks for it.
