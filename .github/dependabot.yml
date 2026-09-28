@@ -10,6 +10,8 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    labels:
+      - dependencies
     commit-message:
       prefix: ci
     groups:
@@ -29,6 +31,8 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    labels:
+      - dependencies
     commit-message:
       prefix: build
     groups:

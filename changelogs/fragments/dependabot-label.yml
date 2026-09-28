@@ -1,0 +1,4 @@
+---
+minor_changes:
+  - Dependabot pull requests carry the ``dependencies`` label, so a routine bump
+    is identifiable without reading the title.
