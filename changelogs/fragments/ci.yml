@@ -1,0 +1,19 @@
+---
+minor_changes:
+  - all modules - declare the module Python floor in ``tests/config.yml`` and have
+    the sanity and units jobs test it. Those jobs ran on the oldest Python each
+    ansible-core lists, 3.8 included, where ``typing.TypeGuard`` and
+    ``datetime.UTC`` do not exist, so the import sanity test and every unit cell
+    failed on code that runs on any supported controller.
+  - the docs, check and release workflows pin ``astral-sh/setup-uv`` to a release
+    that exists, and the two that install ``okf`` fetch the Go release it needs.
+    ``v10`` was never published as a floating tag, and ``actions/setup-go`` pins
+    ``GOTOOLCHAIN=local``, so those jobs failed before their first step.
+  - the two ``.contrib/scripts/`` files pass the sanity tests that read them. One named a
+    discarded value ``_``, which pylint refuses, and one carried a ``python3``
+    shebang, which the shebang test refuses. Neither showed locally, because
+    ``make sanity`` stages a subset of the tree that excludes ``.contrib/scripts/``.
+  - the unit harness redacts the no_log values ansible-core 2.22 reports for the
+    controller to redact, rather than only dropping the key that carries them. On
+    2.22 the credential stayed in the result, so the assertion that it is absent
+    failed on the two newest cells once the import failures were gone.

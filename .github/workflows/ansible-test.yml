@@ -1,0 +1,96 @@
+---
+# Sanity must pass against devel too: new sanity tests land there first.
+#
+# uv is absent from the ansible-test jobs: that action builds its own containers,
+# and a uv venv alongside it fails for reasons unrelated to the code.
+
+name: ansible-test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  sanity:
+    name: sanity ${{ matrix.ansible }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible: [stable-2.19, stable-2.20, stable-2.21, stable-2.22, devel]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ansible-community/ansible-test-gh-action@release/v1
+        with:
+          ansible-core-version: ${{ matrix.ansible }}
+          target-python-version: '3.12'
+          testing-type: sanity
+
+  units:
+    name: units ${{ matrix.ansible }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible: [stable-2.19, stable-2.20, stable-2.21, stable-2.22, devel]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ansible-community/ansible-test-gh-action@release/v1
+        with:
+          ansible-core-version: ${{ matrix.ansible }}
+          target-python-version: '3.12'
+          testing-type: units
+
+  integration:
+    name: integration ${{ matrix.ansible }} ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible: [stable-2.19, stable-2.20, stable-2.21, stable-2.22, devel]
+        # The floor and one above it. The modules target 3.12, so nothing older
+        # can run them, and 2.21 itself requires 3.12 or later.
+        python: ['3.12', '3.13']
+        exclude:
+          # devel tracks ansible-core's next series, which has no 3.12 build to
+          # test against yet, and pairing the two produces a failure that says
+          # nothing about this collection.
+          - ansible: devel
+            python: '3.12'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ansible-community/ansible-test-gh-action@release/v1
+        with:
+          ansible-core-version: ${{ matrix.ansible }}
+          target-python-version: ${{ matrix.python }}
+          testing-type: integration
+
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: pyproject.toml
+          python-version: '3.12'
+
+      - name: Install the locked tooling environment
+        run: uv sync --locked
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.24'
+
+      # setup-go pins GOTOOLCHAIN=local, so the release okf needs is fetched only
+      # because this asks for it.
+      - name: Install okf
+        run: GOTOOLCHAIN=auto go install github.com/okfcli/okf/cmd/okf@latest
+
+      - name: Run the hermetic gates
+        run: make check

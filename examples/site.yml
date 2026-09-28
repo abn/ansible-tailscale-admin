@@ -1,0 +1,66 @@
+---
+# One play that declares a tailnet and leaves it. The credential is read from
+# the environment, so no secret is stored here. docs/examples.md explains what
+# this declares, what a second run does, and what has to already exist.
+- name: Declare the tailnet
+  hosts: localhost
+  gather_facts: false
+  vars:
+    # "-" is the default tailnet of the credential. Give a tailnet ID, with its
+    # leading dash, to manage another one: -e tailnet="-1234567890123".
+    tailnet: "-"
+    # The tag the Service and the device carry. It has to be granted in
+    # tagOwners, which policies/tailnet.hujson does.
+    tailnet_tag: tag:example
+    # The Service this play publishes.
+    tailnet_service_name: svc:example-web
+    # An existing device, by the name the tailnet holds it under. Empty skips
+    # the device task, because these modules cannot create a device.
+    tailnet_device_name: ""
+    # An existing user, by login name. Empty skips the user task, because a
+    # playbook cannot create a user.
+    tailnet_user_login: ""
+    # The role that user is put into. Naming a user in tailnet_user_login is
+    # what makes this reachable, and the tailnet must keep an owner.
+    tailnet_user_role: member
+  module_defaults:
+    group/abn.tailscale.tailscale:
+      tailnet: "{{ tailnet }}"
+      oauth_client_id: "{{ lookup('env', 'TS_OAUTH_CLIENT_ID') }}"
+      oauth_client_secret: "{{ lookup('env', 'TS_OAUTH_CLIENT_SECRET') }}"
+  tasks:
+    - name: Apply the access control policy
+      abn.tailscale.tailscale_policy:
+        policy: "{{ playbook_dir }}/policies/tailnet.hujson"
+
+    - name: Turn on MagicDNS behind a public resolver
+      abn.tailscale.tailscale_dns:
+        magic_dns: true
+        nameservers:
+          - address: 1.1.1.1
+
+    - name: Keep authorisation keys valid for ninety days
+      abn.tailscale.tailscale_settings:
+        devices_key_duration_days: 90
+
+    - name: Publish the web Service
+      abn.tailscale.tailscale_service:
+        name: "{{ tailnet_service_name }}"
+        comment: Published by examples/site.yml
+        ports:
+          - tcp:443
+        tags:
+          - "{{ tailnet_tag }}"
+
+    - name: Tag an existing device
+      abn.tailscale.tailscale_device:
+        device_name: "{{ tailnet_device_name }}"
+        tags:
+          - "{{ tailnet_tag }}"
+      when: tailnet_device_name | length > 0
+
+    - name: Reconcile an existing user
+      abn.tailscale.tailscale_user:
+        login_name: "{{ tailnet_user_login }}"
+        role: "{{ tailnet_user_role }}"
+      when: tailnet_user_login | length > 0

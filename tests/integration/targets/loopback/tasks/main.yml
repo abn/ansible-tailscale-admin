@@ -1,0 +1,153 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Run by runme.sh, which substitutes the loopback base_url and the policy path.
+# Written as a task list rather than asserted inline so that a failure names the
+# expectation that broke instead of printing a diff of two JSON blobs.
+
+- name: Reconcile the policy against a document the tailnet does not hold
+  abn.tailscale.tailscale_policy:
+    policy: "{{ policy_file }}"
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "{{ base_url }}"
+    validate_certs: false
+  diff: true
+  register: first
+
+- name: The first run reports what it changed
+  ansible.builtin.assert:
+    that:
+      - first is changed
+      - first.changed_paths | length > 0
+      # The callback reads result['diff'] and renders nothing without it, so the
+      # rendered diff is the assertion. Asserting on the key would pass against a
+      # module that returns one under a name the callback ignores.
+      - first.diff.before != first.diff.after
+      - first.diff.after.acls | length == 1
+
+- name: Reconcile again, over the same input
+  abn.tailscale.tailscale_policy:
+    policy: "{{ policy_file }}"
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "{{ base_url }}"
+    validate_certs: false
+  diff: true
+  register: second
+
+- name: The second run changes nothing
+  ansible.builtin.assert:
+    that:
+      - second is not changed
+      - second.changed_paths | length == 0
+      - second.diff.before == second.diff.after
+
+- name: Turn on MagicDNS
+  abn.tailscale.tailscale_dns:
+    magic_dns: true
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "{{ base_url }}"
+    validate_certs: false
+  diff: true
+  register: dns
+
+- name: The DNS change is reported as a diff, not as a whole replaced document
+  ansible.builtin.assert:
+    that:
+      - dns is changed
+      # The tailnet already had a nameserver, and the module must not discard it.
+      - dns.diff.after.nameservers | length == 1
+      - dns.diff.after.preferences.magicDNS
+
+- name: Ask for the same DNS again
+  abn.tailscale.tailscale_dns:
+    magic_dns: true
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "{{ base_url }}"
+    validate_certs: false
+  register: dns_again
+
+- name: The second DNS run changes nothing
+  # Idempotency is the collection's first invariant, and for DNS it is the harder
+  # half: the endpoint replaces the whole document, so converging means the
+  # module must be able to read back what it wrote.
+  ansible.builtin.assert:
+    that:
+      - dns_again is not changed
+      - dns_again.diff.before == dns_again.diff.after
+
+- name: Require device approval
+  abn.tailscale.tailscale_settings:
+    devices_approval_on: true
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "{{ base_url }}"
+    validate_certs: false
+  diff: true
+  register: settings
+
+- name: The settings diff covers the setting that changed and nothing else
+  ansible.builtin.assert:
+    that:
+      - settings is changed
+      - settings.changed_settings == ['devicesApprovalOn']
+      # A dict literal is not a valid conditional in Jinja, so the keys are
+      # named. The length assertions are what keep the diff from widening to the
+      # whole settings document.
+      - settings.diff.before | length == 1
+      - settings.diff.after | length == 1
+      - settings.diff.before.devicesApprovalOn == false
+      - settings.diff.after.devicesApprovalOn == true
+
+- name: Require device approval again
+  abn.tailscale.tailscale_settings:
+    devices_approval_on: true
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "{{ base_url }}"
+    validate_certs: false
+  register: settings_again
+
+- name: The second settings run changes nothing
+  ansible.builtin.assert:
+    that:
+      - settings_again is not changed
+      - settings_again.changed_settings | length == 0
+
+- name: Reconcile a policy that is already right
+  abn.tailscale.tailscale_policy:
+    policy: "{{ policy_file }}"
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "{{ base_url }}"
+    validate_certs: false
+  register: converged
+  ignore_errors: true
+
+- name: The write was guarded by the fingerprint the read returned
+  # The stub refuses a policy write whose If-Match does not match what it issued.
+  # A run that only reads, or that writes unguarded, would fail here, so this is
+  # the assertion that makes the concurrency guard load-bearing end to end rather
+  # than only in a unit test.
+  ansible.builtin.assert:
+    that:
+      - converged is not failed
+      - converged is not changed
+      - "'If-Match' not in (converged.msg | default(''))"
+
+- name: Point the module at a port nothing is listening on
+  abn.tailscale.tailscale_policy:
+    policy: "{{ policy_file }}"
+    api_token: tskey-api-00000000000000000000000000000000
+    base_url: "http://127.0.0.1:1/api/v2"
+    validate_certs: false
+  register: unreachable
+  ignore_errors: true
+
+- name: A refused connection fails with a message, not a traceback
+  ansible.builtin.assert:
+    that:
+      - unreachable is failed
+      # Before the transport failure was handled, this reached the operator as a
+      # MODULE FAILURE carrying the credential inside a urllib traceback.
+      - "'MODULE FAILURE' not in (unreachable.msg | default(''))"
+      - "'urllib' not in (unreachable.msg | default(''))"
+      - "'no answer arrived' in (unreachable.msg | default(''))"
+      # A read that never arrived changed nothing, and saying so is safe.
+      - "'nothing was read and nothing was changed' in (unreachable.msg | default(''))"

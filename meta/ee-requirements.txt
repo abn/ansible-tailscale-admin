@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Modules execute on the target host, where third-party packages are not
+# installable, so the runtime is the standard library plus ansible.module_utils.
+#
+# Do not delete this file even while it is empty. A root-level requirements.txt
+# is conventionally used for test and development dependencies, and having
+# ansible-builder consume it would bloat the execution environment.
+#
+# Entries must not pin or cap versions. Only >=x.y.z (optionally with !=x.y.z),
+# or no version at all.

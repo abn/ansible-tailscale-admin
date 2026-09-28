@@ -1,0 +1,13 @@
+---
+bugfixes:
+  - tailscale_dns - an omitted ``use_with_exit_node`` no longer turns a resolver's
+    flag off. The field defaulted to false, so a task that never mentioned it
+    reported a change on every run against a tailnet that had the flag on, and
+    applying the run cleared it. The field now carries the tailnet's own value
+    forward, matched by address, and setting ``use_with_exit_node`` to false is the
+    explicit way to clear it.
+minor_changes:
+  - tailscale_dns - a resolver entry may be a bare address as a string as well as a
+    mapping with ``address`` and an optional ``use_with_exit_node``, so the common
+    case needs no nesting. Both forms apply to ``nameservers`` and to the values of
+    ``split_dns``.

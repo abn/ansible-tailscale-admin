@@ -1,0 +1,28 @@
+---
+# The group lets a playbook set the connection options once under `module_defaults`.
+# Every module in it accepts them, so they need not be repeated per task.
+requires_ansible: '>=2.19.0'
+
+# Only modules that exist are listed: a name no module answers to breaks the group
+# for every task that uses it.
+action_groups:
+  tailscale:
+    - abn.tailscale.tailscale_auth_key
+    - abn.tailscale.tailscale_aws_external_id
+    - abn.tailscale.tailscale_contacts
+    - abn.tailscale.tailscale_device
+    - abn.tailscale.tailscale_device_attributes
+    - abn.tailscale.tailscale_device_info
+    - abn.tailscale.tailscale_device_routes
+    - abn.tailscale.tailscale_dns
+    - abn.tailscale.tailscale_log_streaming
+    - abn.tailscale.tailscale_logs
+    - abn.tailscale.tailscale_policy
+    - abn.tailscale.tailscale_service
+    - abn.tailscale.tailscale_service_info
+    - abn.tailscale.tailscale_settings
+    - abn.tailscale.tailscale_user
+    - abn.tailscale.tailscale_webhook
+
+# plugin_routing and import_redirection are empty. Add an entry when a plugin is
+# renamed or moved, so old names keep resolving.

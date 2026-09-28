@@ -1,0 +1,12 @@
+---
+minor_changes:
+  - add the ``abn.tailscale.device`` and ``abn.tailscale.service`` lookups, which
+    resolve one device or Service and return one of its properties for a template
+    that needs a value rather than a list. A device is named by its label, its
+    MagicDNS name, an address it holds or the id the API lists; a Service by its
+    ``svc:`` name. A term matching no device, or more than one, is an error rather
+    than a guess.
+  - the lookups read a credential from ``tailscale_api_token`` or the OAuth pair,
+    and the tailnet from ``tailscale_tailnet``, because the action group and
+    ``module_defaults`` that carry the connection options to a module do not reach
+    a lookup.

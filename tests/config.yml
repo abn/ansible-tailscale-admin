@@ -1,0 +1,7 @@
+---
+# ansible-test derives the Python versions it compiles and imports against from
+# the target support ansible-core declares, which reaches back to 3.8. The
+# modules use ``typing.TypeGuard`` and ``datetime.UTC`` and cannot run there, so
+# the floor is declared rather than left for those checks to discover.
+modules:
+  python_requires: '>=3.12'

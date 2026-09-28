@@ -1,0 +1,11 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+dependencies: []
+
+# Nothing here needs a credential or a network. The point of this target is the
+# one thing a unit test with a test double cannot establish: that the module
+# behaves the same way when a real AnsibleModule, a real transport and a real
+# callback are involved. That is how `diff_mode: support: full` was found to
+# render nothing, since the unit tests passed while asserting only that the keys
+# existed.

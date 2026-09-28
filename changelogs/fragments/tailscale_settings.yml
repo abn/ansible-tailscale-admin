@@ -1,0 +1,5 @@
+---
+minor_changes:
+  - tailscale_settings - set individual tailnet settings such as device approval
+    and authorisation key duration, leaving every option the task does not
+    mention as the tailnet already has it.

@@ -1,0 +1,12 @@
+{
+  // Deny everything except the engineering group reaching the web tag on 443.
+  // The comment and the trailing comma are here so the run also exercises the
+  // HuJSON path, which is what a policy file usually is.
+  "acls": [
+    {
+      "action": "accept",
+      "src": ["group:eng"],
+      "dst": ["tag:web:443"],
+    },
+  ],
+}

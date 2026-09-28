@@ -1,0 +1,18 @@
+---
+# Navigation and attribution for the built docsite.
+
+edit_on_github:
+  repository: abn/ansible-tailscale-admin
+  branch: main
+  path_prefix: ''
+
+extra_links:
+  - description: Report an issue
+    url: https://github.com/abn/ansible-tailscale-admin/issues/new/choose
+  - description: Tailscale Admin API reference
+    url: https://tailscale.com/api
+
+communication:
+  forums:
+    - topic: Ansible Forum
+      url: https://forum.ansible.com/c/help/6

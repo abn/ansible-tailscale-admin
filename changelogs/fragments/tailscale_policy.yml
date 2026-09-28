@@ -1,0 +1,22 @@
+---
+minor_changes:
+  - tailscale_policy - manage a tailnet access control policy from a HuJSON file,
+    writing only when the two differ and always guarding the write with the
+    ``ETag`` the read returned.
+  - tailscale_policy - refuse a policy with neither an ``acls`` nor a ``grants``
+    key, which Tailscale reads as allowing every device to reach every other,
+    unless the task sets ``allow_all_traffic``.
+  - tailscale_policy - run the access tests a policy document declares before
+    replacing the current one, and read the verdict the server returns, so a
+    document failing its own tests is refused while it is still a proposal.
+  - tailscale_policy - add a ``groups`` option, so a task can declare the members
+    of a group rather than only the file, and report an access rule that names a
+    group no section of the document declares.
+  - tailscale_policy - add an ``app_connectors`` option, so a task can declare an
+    app connector, naming a preset application by the name Tailscale publishes
+    and letting the module write the ``presetAppID`` the API expects. A connector
+    whose tag ``tagOwners`` does not declare is refused before the write the
+    server would refuse, and one no access rule makes reachable, or that has no
+    route approver, is reported as a warning.
+  - tailscale_policy - add a ``tests`` option, so a task can declare an access
+    test alongside the rules it asserts something about.

@@ -1,0 +1,20 @@
+// The access control policy examples/site.yml declares. This is the whole
+// policy: applying it replaces whatever the tailnet held, because the policy
+// endpoint has no partial update. Edit it to describe the tailnet you want.
+{
+  // A tag exists only where tagOwners grants it, and the Service task and the
+  // device task both carry this one.
+  "tagOwners": {
+    "tag:example": ["autogroup:admin"]
+  },
+  // Every member reaches every destination. A document with neither acls nor
+  // grants is allow-all too, and the module refuses that spelling unless
+  // allow_all_traffic is set, so this file states the access it wants.
+  "acls": [
+    {
+      "action": "accept",
+      "src": ["*"],
+      "dst": ["*:*"]
+    }
+  ]
+}

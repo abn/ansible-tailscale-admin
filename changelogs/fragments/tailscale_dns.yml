@@ -1,0 +1,5 @@
+---
+minor_changes:
+  - tailscale_dns - manage the DNS resolvers, split DNS mappings, search paths
+    and preferences of a tailnet, leaving any option the task does not mention as
+    the tailnet already has it.

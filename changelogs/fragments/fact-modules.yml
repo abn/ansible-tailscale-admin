@@ -1,0 +1,10 @@
+---
+minor_changes:
+  - tailscale_device_info - read every device a tailnet holds, as the API's own
+    documents, for a task that feeds another control plane and has no device to
+    name. C(devices) carries the MagicDNS name, both address families and the two
+    identifiers the API accepts. The module never reports a change.
+  - tailscale_service_info - read every Service a tailnet holds, as the API's own
+    C(vipServices) documents. This is the list endpoint C(tailscale_service)
+    selects one name from, exposed for a task that has no name yet. The module
+    never reports a change.

@@ -1,0 +1,92 @@
+# uv needs a name and version; galaxy.yml holds the collection's, and
+# `package = false` keeps this project off any index.
+[project]
+name = "abn-tailscale"
+version = "0.0.0"
+description = "Development environment for the abn.tailscale Ansible collection."
+requires-python = ">=3.12"
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "ansible-core>=2.19.0",
+    "ansible-lint>=25.1.0",
+    "antsibull-changelog>=0.35.0",
+    "antsibull-docs>=2.27.0",
+    "pre-commit>=4.0.0",
+    "pytest>=8.0.0",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.15.0",
+    "ty>=0.0.1a21",
+]
+
+[tool.ruff]
+# plugins/ is deliberately not excluded. A bare "plugins" glob also swallows
+# tests/unit/plugins/**, and "./plugins" breaks isort's one-import-per-line, so
+# ansible-test owns that layout instead.
+
+line-length = 100
+target-version = "py312"
+src = ["tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "N",   # pep8-naming
+    "TID", # flake8-tidy-imports
+    "RUF", # ruff-specific
+]
+ignore = [
+    "E501",   # line length is owned by the formatter
+    "B008",   # function call in argument defaults is the idiom for argument specs
+    "SIM108", # ternaries hide intent in reconciliation branches
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Genuine conflicts only; a list mirroring `select` would be a second place to
+# update.
+"plugins/modules/*.py" = [
+    # DOCUMENTATION, EXAMPLES and RETURN go above the imports; E402 forbids that.
+    "E402",
+]
+"plugins/lookup/*.py" = [
+    # The same layout, for a lookup's own DOCUMENTATION.
+    "E402",
+]
+"plugins/module_utils/_tailscale/_errors.py" = [
+    # The exception names are the HTTP statuses; TailscaleNotFoundError would say
+    # it twice.
+    "N818",
+]
+
+[tool.ruff.lint.isort]
+# No known-first-party entry: no importable first-party package exists.
+force-single-line = true
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Relative imports break under Ansible's collection loader.
+ban-relative-imports = "all"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ty.src]
+# The kernel is unreachable from tests by import, so `plugins` is checked here.
+include = ["plugins", "tests", ".contrib"]
+
+[tool.pytest.ini_options]
+# For editors and single-file runs; ansible-test owns the real runner.
+testpaths = ["tests/unit"]
+filterwarnings = ["ignore:AnsibleCollectionFinder has already been configured"]
+markers = [
+    "live_smoke: reaches a real tailnet, gated by an explicit acknowledgement",
+]

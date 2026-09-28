@@ -1,0 +1,10 @@
+---
+minor_changes:
+  - the live harness now puts back ansible-core's ``is_controller`` flag, which
+    importing ``ansible`` into the test process flips to true. Left true,
+    ``AnsibleModule.warn`` displayed a warning instead of recording it, so a live
+    test asserting on ``result['warnings']`` saw nothing while the warning was
+    printed to stderr beside it.
+  - the ``make spec/drift`` target runs. Two line continuations were missing from
+    the branch that reports drift, so it died with a shell syntax error instead of
+    printing the diff it had just fetched.

@@ -1,0 +1,6 @@
+---
+minor_changes:
+  - the contributor scripts live under ``.contrib/scripts/`` rather than
+    ``scripts/``, and the upstream drift check and the tailnet provisioning flows
+    moved out of the ``Makefile`` into ``spec-drift.sh`` and ``provision.sh``
+    there. No module, option or return value changes.

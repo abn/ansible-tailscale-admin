@@ -1,0 +1,8 @@
+# The target drives all three modules from one loopback stub rather than being
+# named after any one of them, so the context cannot be inferred from the name.
+# Everything here runs on the controller: no managed host is involved and nothing
+# is installed anywhere.
+context/controller
+tailscale_policy
+tailscale_dns
+tailscale_settings

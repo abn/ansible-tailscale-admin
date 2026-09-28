@@ -1,0 +1,8 @@
+---
+minor_changes:
+  - tailscale_service - name the device a host approval is about by
+    ``device_name`` or ``address`` as well as ``device_id``, the way
+    ``tailscale_device`` names one. A name or an address is resolved through the
+    device list, and a selector matching no device, or more than one, is refused
+    rather than guessed at, so a host role can approve and revoke itself without
+    knowing the opaque id the endpoint is addressed with.

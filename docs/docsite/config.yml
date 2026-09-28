@@ -1,0 +1,13 @@
+---
+# Consumed by antsibull-docs when building the HTML docsite.
+# See https://ansible.readthedocs.io/projects/antsibull-docs/
+
+flatmap: false
+envvar_directives: []
+
+changelog:
+  write_changelog: true
+
+ansible_output:
+  global_env:
+    ANSIBLE_STDOUT_CALLBACK: default

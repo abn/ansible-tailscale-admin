@@ -1,0 +1,45 @@
+# Scratch area: local-only working notes, never committed.
+.agents/brain/
+
+# Live-test credentials, in the project root and never committed.
+.tskey
+.tskey-oauth
+.tailnet-id
+
+# Ansible test output
+/tests/output/
+/tests/integration/targets/**/output/
+*.retry
+
+# Locally installed collection, built by ansible-test
+/.ansible/
+
+# Collection build artifacts
+*.tar.gz
+/MANIFEST.json
+/FILES.json
+/build/
+/dist/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ty_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Tooling caches
+/.cache/
+/changelogs/.plugin-cache.yaml
+
+# Editors and OS
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store

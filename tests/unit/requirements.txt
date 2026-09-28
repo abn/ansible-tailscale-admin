@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Anything imported from tests/unit/** must be listed here, along with anything
+# providing a fixture the suite uses. ansible-test installs this file into the
+# unit-test environment.
+#
+# `pytest-mock` is listed because 8 files under tests/unit/ take the `mocker`
+# fixture. ansible-test happens to bundle it in its own environment, so its
+# absence here was invisible to `make test` while breaking the single-file run
+# that pyproject.toml documents for editor integration.
+#
+# `PyYAML` exists to read the vendored OpenAPI description, so the spec-drift
+# test can compare the hand-written operation table against it. Nothing under
+# plugins/ may import it: a module runs on the target host with no third-party
+# packages, so the table in plugins/module_utils/_tailscale/_spec.py is literals.
+
+pytest-mock
+PyYAML

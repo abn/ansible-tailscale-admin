@@ -1,0 +1,18 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+profile: production
+
+exclude_paths:
+  - .agents/brain/
+  - .venv/
+  - tests/output/
+  - changelogs/changelog.yaml
+
+# galaxy[version-must-be-at-least-1-0-0] is suppressed until the first public
+# release. The collection is deliberately versioned 0.1.0 because 1.0.0 is a
+# compatibility promise and nothing here has been exercised against a real
+# tailnet yet. Galaxy itself only accepts 1.0.0 or later, so this is a release
+# gate rather than a permanent suppression. Remove this line when tagging 1.0.0.
+skip_list:
+  - galaxy[version-must-be-at-least-1-0-0]

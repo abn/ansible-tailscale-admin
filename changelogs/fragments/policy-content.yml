@@ -1,0 +1,8 @@
+---
+minor_changes:
+  - tailscale_policy - take the document as ``content``, HuJSON text the task
+    carries, as well as from a file by ``policy``. Exactly one of the two supplies
+    it, both take the same HuJSON relaxations, and the declared ``groups``,
+    ``app_connectors`` and ``tests`` splice into either, so a policy a template
+    produced needs no intermediate file. The write, the ``ETag`` guard and the
+    refusal to open a tailnet are unchanged.

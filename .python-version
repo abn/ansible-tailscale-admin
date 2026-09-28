@@ -1,0 +1,4 @@
+# Interpreter for local development tooling. This is not the floor for module
+# execution: modules run on the target host, against the oldest ansible-core in
+# `requires_ansible`. See .agents/rules/ansible.md.
+3.12

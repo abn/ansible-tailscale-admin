@@ -1,0 +1,55 @@
+---
+# See https://docs.ansible.com/projects/ansible/latest/dev_guide/collections_galaxy_meta.html
+namespace: abn
+name: tailscale
+version: 0.1.0
+readme: README.md
+authors:
+  - Arun Babu Neelicattu (github.com/abn)
+description: Manage a Tailscale tailnet declaratively through the Tailscale Admin API.
+license:
+  - GPL-3.0-or-later
+  - BSD-2-Clause
+  - BSD-3-Clause
+tags:
+  - networking
+  - tools
+  - api
+  - security
+dependencies: {}
+repository: https://github.com/abn/ansible-tailscale-admin
+documentation: https://github.com/abn/ansible-tailscale-admin/tree/main/docs
+homepage: https://github.com/abn/ansible-tailscale-admin
+issues: https://github.com/abn/ansible-tailscale-admin/issues
+build_ignore:
+  # ansible-galaxy build does not read .gitignore, so anything not listed ships;
+  # `make build` checks the artifact independently rather than trusting this list.
+  - .venv
+  - .tox
+  - .nox
+  - .cache
+  - .ruff_cache
+  - .ansible
+  - .pytest_cache
+  - build
+  - dist
+  - built-docs
+  - __pycache__
+  - '*.pyc'
+  - .agents
+  - .github
+  - .gitignore
+  - .pre-commit-config.yaml
+  - .python-version
+  - .yamllint
+  - .ansible-lint
+  - pyproject.toml
+  - uv.lock
+  - Makefile
+  - .contrib
+  - AGENTS.md
+  - CODE_OF_CONDUCT.md
+  - MAINTAINERS
+  - tests/fixtures
+  - tests/output
+  - changelogs/.plugin-cache.yaml

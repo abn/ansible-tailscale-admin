@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Modules are pure Python and need no system packages beyond the interpreter
+# ansible-core already provides.
+#
+# Do not delete this file even while it is empty. See the note in
+# meta/ee-requirements.txt.
+#
+# Entries must not pin or cap versions.

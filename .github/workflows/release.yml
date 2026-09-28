@@ -1,0 +1,106 @@
+---
+# Publishing is a tag, not a button: the tag is the version, so the artifact and
+# the tag cannot disagree. Nothing here runs on a pull request, and Galaxy will not
+# replace a version, so the gate is a tag rather than a branch rule.
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  # Galaxy rejects a re-publish of a version that already exists, so this exists
+  # to make that a clear failure rather than a confusing one.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: publish to galaxy
+    runs-on: ubuntu-latest
+    environment: galaxy
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # The tag is what is released, so a tag push that is not the tip of a
+          # branch would publish something no branch describes.
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: pyproject.toml
+          python-version: '3.12'
+
+      - name: Install the locked tooling environment
+        run: uv sync --locked
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.24'
+
+      # setup-go pins GOTOOLCHAIN=local, so the release okf needs is fetched only
+      # because this asks for it.
+      - name: Install okf
+        run: GOTOOLCHAIN=auto go install github.com/okfcli/okf/cmd/okf@latest
+
+      - name: The tag and the manifest must name the same version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          tagged="${GITHUB_REF_NAME#v}"
+          declared="$(python3 -c "import yaml; print(yaml.safe_load(open('galaxy.yml'))['version'])")"
+          if [ "$tagged" != "$declared" ]; then
+            printf '  tag says %s, galaxy.yml says %s\n' "$tagged" "$declared" >&2
+            exit 1
+          fi
+          printf '  releasing %s\n' "$declared"
+
+      # Galaxy only accepts 1.0.0 or later, so this is where a 0.x collection is
+      # stopped, with the reason to hand rather than a schema error.
+      - name: Refuse a version Galaxy will not accept
+        run: |
+          declared="$(python3 -c "import yaml; print(yaml.safe_load(open('galaxy.yml'))['version'])")"
+          major="${declared%%.*}"
+          if [ "$major" -lt 1 ]; then
+            printf '  %s is below 1.0.0, which Galaxy does not accept.\n' "$declared" >&2
+            printf '  1.0.0 is a compatibility promise: bump the version deliberately.\n' >&2
+            exit 1
+          fi
+
+      - name: Run the hermetic gates
+        run: make check
+
+      # The changelog is assembled from the fragments rather than written by
+      # hand, so a release cannot ship with a fragment still sitting in the tree.
+      - name: Assemble the changelog
+        run: uv run --no-sync --locked antsibull-changelog release
+
+      - name: Verify the assembled changelog
+        run: uv run --no-sync --locked antsibull-changelog lint
+
+      # make build asserts the artifact's contents and its size, so a development
+      # path that leaked in stops the release rather than shipping.
+      - name: Build the artifact
+        run: make build
+
+      - name: Publish
+        env:
+          GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
+        run: |
+          if [ -z "${GALAXY_API_KEY}" ]; then
+            printf '  GALAXY_API_KEY is not set. It belongs to the galaxy environment.\n' >&2
+            exit 1
+          fi
+          uv run --no-sync --locked ansible-galaxy collection publish \
+            build/abn-tailscale-*.tar.gz \
+            --api-key "${GALAXY_API_KEY}" \
+            --server https://galaxy.ansible.com
+
+      - name: Record what was published
+        run: |
+          {
+            printf '### Published\n\n'
+            printf -- '- `%s` to Galaxy from `%s`\n' \
+              "$(ls build/abn-tailscale-*.tar.gz)" "${GITHUB_REF_NAME}"
+          } >> "$GITHUB_STEP_SUMMARY"

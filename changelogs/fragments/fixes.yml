@@ -1,0 +1,84 @@
+---
+bugfixes:
+  - all modules - return the ``diff`` that the declared full diff support promises.
+    The callback reads ``result['diff']`` and nothing else, so the three modules
+    declared full diff support and rendered nothing at all under ``--diff``. A
+    top-level ``before`` and ``after`` look equivalent and are not, which is what
+    the first attempt at this did.
+  - tailscale_policy - read the verdict a failed validation returns with a 200,
+    so a document failing its own access tests is now refused by the validation
+    request rather than incidentally by the write. The failures are reported with
+    the test that failed and why, bounded to five and scrubbed.
+  - tailscale_policy - refuse on the ``errors`` a validation entry carries rather
+    than on the entry's presence. The same 200 response also carries ``warnings``,
+    so a policy that was merely warned about was being refused as though it had
+    failed its tests. Warnings are now surfaced as warnings and the write proceeds.
+  - tailscale_dns - fail rather than merge into an empty document when the current
+    configuration cannot be read. The endpoint replaces the whole document, so the
+    previous behaviour silently discarded every resolver the tailnet had and
+    reported success, reachable from a proxy error page answering 200.
+  - all modules - report a request that never produced a status as a message
+    rather than as a traceback carrying the credential in its text. This covers a
+    refused connection, a reset after the connection was accepted, a body that
+    stopped early and a timeout; the last three were not caught at all, because
+    urllib only wraps the request and leaves the response side to raise what it
+    raises. A read is now retried once on any of them, on the same argument that
+    already covered a 429. A write is not retried, and its message now says the
+    request may already have been applied rather than claiming nothing changed,
+    which is the direction that would be dangerous for a policy write.
+  - tailscale_policy - report an unreadable or mistyped ``policy`` path as a
+    failure rather than a traceback, which is the most likely first mistake.
+  - all modules - scrub credential-shaped text out of a rejected tag list. Every
+    other path rendering text from outside the collection already did, so a token
+    echoed inside a tag list survived into the message and into any log that
+    printed it.
+  - tailscale_policy - stop the 412 message advising a ``force`` option no module
+    declares, so following it produced an unsupported-parameters error.
+  - tailscale_policy - converge when the policy file changes under a run rather
+    than failing on the precondition failure. A 412 is not terminal, so the
+    document is read again, the diff recomputed against what it now holds, and
+    the write retried, at most three times. Every attempt compares and writes
+    against the document it has just read, so the diff it reports is about the
+    tailnet as it is; the declared document stays authoritative, so a section the
+    file does not declare is removed as it would be on any run. Every write still
+    carries ``If-Match``, and a document that changes on every attempt fails
+    saying it is contended.
+
+minor_changes:
+  - all modules - the connection options are declared once in a shared helper
+    rather than copied into each module. Two of the three copies had degraded to
+    an unannotated transport closure, which is what duplication costs.
+  - all modules - ``plugins/`` is now type checked, which it was not. Six
+    diagnostics were real, including a read through a value the code never
+    checked, and turning it on also verifies that the API client satisfies the
+    protocol the policy code depends on.
+  - removed ``tailscale_scaffold``, which held the documentation fragments to
+    validate before any real module included them. All three include them now, so
+    ``validate-modules`` cross-checks the fragments against modules that work.
+  - the Galaxy artifact check no longer names a single development path in the
+    Makefile. It is derived from ``build_ignore`` in ``galaxy.yml`` instead, which
+    catches a malformed entry. One with a trailing slash is accepted by
+    ``ansible-galaxy build`` and then ships the directory anyway, and the build
+    still succeeded before this change.
+  - the fast gate ``make check`` now lints the collection documentation, which is
+    the only thing in it that parses a module's ``DOCUMENTATION``, ``EXAMPLES``
+    and ``RETURN`` as YAML.
+  - the gate ``make integration`` runs a target again instead of failing on an
+    empty directory, and ``make check/full`` includes it. The ten CI integration
+    matrix jobs were all failing on ``ansible-test`` refusing to run with no
+    targets. The new target drives all three modules through a real playbook
+    against a loopback stub, so it needs no credential and no network.
+  - tailscale_dns - a value the server will not store is no longer sent. A false
+    and an empty collection are each accepted and each stored as an absent key, so
+    a task saying ``magic_dns`` set to false differed from the tailnet on every
+    run and never converged. Measured against the real endpoint, a preferences
+    block whose only value is false comes back empty, an empty ``splitDNS`` comes
+    back as no key, and a resolver's ``useWithExitNode`` is dropped when it is
+    false. An empty list now clears its key rather than emptying it, and a
+    preference that is off is removed from the request rather than sent as false.
+  - all modules - report the reason a 403 carries instead of an inferred scope. A
+    403 does not always mean a missing scope. Creating an OAuth client was refused
+    with "actor cannot set scopes" from a credential holding every permission in
+    the tailnet, and the message named ``auth_keys`` as the missing scope. The
+    API's own words now come first, and the inferred scope is offered only when the
+    API said nothing, and as a starting point rather than as its reason.

@@ -1,0 +1,8 @@
+---
+minor_changes:
+  - tailscale_device, tailscale_service - document that ``device_name`` is the
+    Tailscale node name rather than the machine's own hostname, and point at
+    ``tailscale_device_info``, which returns both names for every device.
+  - tailscale_service - document that the module covers a Service and its host
+    approvals together, and that declaring a Service with the hosts it may run on
+    is two tasks rather than one.

@@ -1,0 +1,86 @@
+---
+default_language_version:
+  python: python3.12
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # LICENSES/ and tests/fixtures/ are third-party text redistributed byte for
+      # byte; an autofixer that rewrites them is a provenance problem.
+      - id: trailing-whitespace
+        exclude: ^(LICENSES/|tests/fixtures/)
+      - id: end-of-file-fixer
+        exclude: ^(LICENSES/|tests/fixtures/)
+      - id: mixed-line-ending
+        args: [--fix=lf]
+        exclude: ^(LICENSES/|tests/fixtures/)
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+
+  # The project's own ruff through the lockfile, not a second one pre-commit
+  # installs from the hook's rev, which can disagree with `make lint`.
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run --no-sync --locked ruff check --fix --exit-non-zero-on-fix
+        language: system
+        types: [python]
+        require_serial: true
+      - id: ruff-format
+        name: ruff format
+        entry: uv run --no-sync --locked ruff format
+        language: system
+        types: [python]
+        require_serial: true
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        args: [--strict, --verbose]
+        stages: [commit-msg]
+
+  - repo: local
+    hooks:
+      # Editorial and privacy invariants no existing tool enforces. Each hook
+      # excludes itself, because the patterns and this prose contain the characters
+      # they forbid. The dash pattern is a full-sequence alternation rather than a
+      # character class: pygrep compiles entries as bytes, so a multibyte class
+      # byte-matches unrelated UTF-8, arrows for instance.
+      - id: no-dashes
+        name: reject em and en dashes
+        entry: '(—|–)'
+        language: pygrep
+        types: [text]
+        exclude: ^(.pre-commit-config\.yaml|tests/fixtures/)
+
+      - id: no-home-paths
+        name: reject absolute home paths
+        entry: /home/[a-z]+
+        language: pygrep
+        types: [text]
+        exclude: ^(uv\.lock|\.agents/brain/)
+
+      # Scoped to the OKF bundle; rule text elsewhere may name the pattern.
+      - id: no-file-uris
+        name: reject file:// URIs in documentation
+        entry: file://
+        language: pygrep
+        types: [text]
+        files: ^docs/
+  - repo: local
+    hooks:
+      # okfcli validates bundle structure and frontmatter; installed by `make init`.
+      - id: okf-validate
+        name: validate the docs OKF bundle
+        entry: okf validate docs/
+        language: system
+        pass_filenames: false
