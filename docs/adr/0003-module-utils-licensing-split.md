@@ -47,7 +47,7 @@ the split and its reason.
 - **Zero-byte `__init__.py` files cannot carry an SPDX header.** The `empty-init`
   sanity test requires them to be completely empty. The per-file scheme and that
   test are in direct conflict, and the test wins, so the licensing of those files
-  is stated in `LICENSE` rather than in the files. This is the one place the REUSE
+  is stated in `LICENSE.md` rather than in the files. This is the one place the REUSE
   scheme is knowingly incomplete.
 - A future module util promoted from private to public becomes a breaking change
   and needs a rename without the underscore prefix.

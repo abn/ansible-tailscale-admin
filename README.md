@@ -249,7 +249,7 @@ is `make init`, then `make check`.
 GNU General Public License v3.0 or later. Code under `plugins/module_utils/` is
 BSD-2-Clause so it can be reused by projects under incompatible licences, which
 is why ansible-core relicenses its own `module_utils` the same way. Per-file
-licensing follows REUSE; see [LICENSE](LICENSE).
+licensing follows REUSE; see [LICENSE](LICENSE.md).
 
 `tests/fixtures/openapi/tailscale.yaml` is Tailscale's published description of
 its own API, redistributed unmodified under BSD-3-Clause.

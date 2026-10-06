@@ -22,7 +22,7 @@ SPEC := tests/fixtures/openapi/tailscale.yaml
 SPEC_URL := https://api.tailscale.com/api/v2?outputOpenapiSchema=true
 
 # Listed explicitly, so the farm cannot accumulate stale files that get linted.
-COLLECTION_CONTENT := galaxy.yml meta plugins tests changelogs docs README.md LICENSE
+COLLECTION_CONTENT := galaxy.yml meta plugins tests changelogs docs README.md LICENSE.md
 
 ANSIBLE_TEST := ansible-test
 GALAXY_BUILD := ansible-galaxy

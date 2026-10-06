@@ -152,7 +152,7 @@ branch. The ones that actually bite:
   each one to be **completely empty**, zero bytes. This directly conflicts with
   the REUSE convention of an SPDX header in every file, and ansible-test wins:
   the `__init__.py` files carry no header. The licensing of those files is stated
-  in `LICENSE` instead.
+  in `LICENSE.md` instead.
 - `ansible-doc`, which parses module documentation on every supported Python.
 - All 34 tests pass with an empty ignore file. Keep it that way.
 
