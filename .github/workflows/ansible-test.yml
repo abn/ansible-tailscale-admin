@@ -16,7 +16,10 @@ on:
 jobs:
   sanity:
     name: sanity ${{ matrix.ansible }}
-    runs-on: ubuntu-latest
+    # Pinned to ubuntu-22.04: ansible-test-gh-action fails on ubuntu-24.04 due
+    # to a cgroup v2 remount failure in its utility container.
+    # See https://github.com/ansible-community/ansible-test-gh-action/issues/138
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -31,7 +34,10 @@ jobs:
 
   units:
     name: units ${{ matrix.ansible }}
-    runs-on: ubuntu-latest
+    # Pinned to ubuntu-22.04: ansible-test-gh-action fails on ubuntu-24.04 due
+    # to a cgroup v2 remount failure in its utility container.
+    # See https://github.com/ansible-community/ansible-test-gh-action/issues/138
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -46,7 +52,10 @@ jobs:
 
   integration:
     name: integration ${{ matrix.ansible }} ${{ matrix.python }}
-    runs-on: ubuntu-latest
+    # Pinned to ubuntu-22.04: ansible-test-gh-action fails on ubuntu-24.04 due
+    # to a cgroup v2 remount failure in its utility container.
+    # See https://github.com/ansible-community/ansible-test-gh-action/issues/138
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
