@@ -1,0 +1,5 @@
+---
+minor_changes:
+  - the ``ansible-test`` workflow pins containerized test jobs to ``ubuntu-22.04``
+    runners to prevent cgroup v2 remount failures in the utility container on
+    ``ubuntu-latest``.
